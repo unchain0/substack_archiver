@@ -10,7 +10,8 @@ load_dotenv("config.env")
 
 USERNAME = os.environ.get('SUBSTACK_USERNAME')
 PASSWORD = os.environ.get('SUBSTACK_PASSWORD')
-
+os.mkdir("html_dumps")
+os.mkdir("json_dumps")
 
 class SubstackAPIHandler:
 
@@ -20,6 +21,9 @@ class SubstackAPIHandler:
         self.login_url = "https://public.substack.com/api/v1/login"
         self.cookies = cookies
         self.post_requests = post_requests
+
+    
+
 
     def login(self):
 
