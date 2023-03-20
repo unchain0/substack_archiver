@@ -19,6 +19,8 @@ def command_line_parser():
         colors.log("""Usage: python3 substack_archiver.py "SUBSSTACKNAME" "URL", """, "white")
         colors.log("""Example: python3 substack_archiver.py "abc" "https://abc.substack.com" or with custom domain: "name123" "https://abc.com" """, "white")
         print("")
+        colors.log("""Notice there is no "/" at the end of the URL input""", "yellow")
+        print("")
         sys.exit(1)
     else:
         return sys.argv[1], sys.argv[2]
@@ -35,11 +37,9 @@ class SubstackAPIHandler:
         self.substack_handle = substack_handle
         self.base_url = base_url
         self.login_url = f"{self.base_url}/api/v1/login" 
-        #self.post_url = f"https://{substack_handle}.substack.com/api/v1/posts/?limit=50&offset=" # what if custom domain?
         self.post_url = f"{self.base_url}/api/v1/posts?limit=50&offset="
         self.cookies = cookies
         self.post_requests = post_requests
-        # html_dumps and json_dumps folder path
         self.html_path = f"html_dumps/{substack_handle}"
         self.json_path = f"json_dumps/{substack_handle}"  
 

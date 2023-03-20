@@ -12,11 +12,12 @@ To use Substack Archiver, you will need to fill out the "config.env" file with y
 pip install -r requirements.txt
 ```
 
-After you have installed the requirements, you can run the program by executing the following command:
+To run the **Substack Archiver**, simply enter the following command in your terminal:
 
 ```
-python substack_archiver.py
+python substack_archiver.py "substack_name" "url_of_substack"
 ```
+
 
 
 ## Output
