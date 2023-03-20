@@ -3,6 +3,8 @@
 Substack Archiver is a simple Python program that allows users to archive the contents of their Substack newsletter. The program saves all the contents in a separated HTML file and also creates multiple JSON dumps. It is important to note that the HTML is raw, without any CSS or JS. It just provides a basic structure for reading the content.
 Note that direct videos from Substack are not supported. However, you can use a tool such as [yt-dlp](https://github.com/yt-dlp/yt-dlp/) to download the videos and then embed them in the HTML file.
 
+![Substack Archiver](README/images/cover.png)
+
 
 ## Getting Started
 
