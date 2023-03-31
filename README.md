@@ -20,16 +20,12 @@ To run the **Substack Archiver**, simply enter the following command in your ter
 python substack_archiver.py "substack_name" "url_of_substack"
 ```
 
-
+## TODO
+- [ ] Add support for audio files
 
 ## Output
 
 The program will save each Substack post in a separated HTML file and also create multiple JSON dumps. The HTML files will contain all the articles, images, and other content from your Substack newsletter. The JSON dumps will contain metadata such as the title, date, author, and tags for each article.
-
-
-## Error Handling
-
-Please note that Substack Archiver does not include any error handling. As such, it is important to ensure that your Substack login information is correct and that the program is used in a stable environment.
 
 
 ## License
