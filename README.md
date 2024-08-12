@@ -24,8 +24,13 @@ To use Substack Archiver, follow these steps:
 pip install -r requirements.txt
 playwright install
 ```
+3. Update `config.env` accordingly:
+```
+SUBSTACK_USERNAME=""
+SUBSTACK_PASSWORD=""
+``` 
 
-3. Run the Substack Archiver:
+4. Run the Substack Archiver:
 
 ```
 python substack_archiver.py "substack_name" "url_of_substack"
