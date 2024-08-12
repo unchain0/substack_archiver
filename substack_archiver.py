@@ -110,7 +110,7 @@ async def main():
     log(f"Started scraping process, please wait...", "red")
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)  # Set headless to False
+        browser = await p.chromium.launch(headless=True)  # Set headless to False
         page = await browser.new_page()
 
         post_requests = await handler.get_posts(page)
