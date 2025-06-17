@@ -18,8 +18,8 @@ def log(string: str, color: str, font="slant", figlet=False) -> None:
 def welcome_message() -> None:
     log("Substack Archiver", "green", "slant", True)
     log("Created by: @VitaminCPU", "green")
-    log("Version: 2.0", "green")
-    log("Github: github.com/pwrtux", "green")
+    log("Version: 2.1", "green")
+    log("Github: github.com/unchain0", "green")
     print("")
     log("========================================", "white")
     log("Welcome to the Substack Archiver", "white")
