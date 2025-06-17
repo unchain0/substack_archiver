@@ -11,7 +11,7 @@ from playwright.async_api import Page, async_playwright
 
 from colors import log, welcome_message
 
-load_dotenv("config.env")
+load_dotenv(".env")
 request_posts = list[list[dict[str, Any]]]
 
 
