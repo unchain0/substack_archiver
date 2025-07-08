@@ -5,10 +5,10 @@ requires-python = ">=3.12.7"
 dependencies = [
     "certifi==2024.7.4",
     "charset-normalizer==2.0.12",
-    "greenlet==3.0.3",
+    "greenlet>=3.1.1",
     "idna==3.7",
-    "playwright==1.46.0",
-    "pyee==11.1.0",
+    "playwright>=1.47.0",
+    "pyee>=12",
     "pyfiglet==0.8.post1",
     "python-dotenv==1.0.0",
     "requests==2.27.1",
@@ -17,11 +17,18 @@ dependencies = [
     "termcolor==1.1.0",
     "typing-extensions==4.12.2",
     "urllib3==1.26.19",
+    "html2text",
+    "beautifulsoup4",
+    "tqdm",
+    "loguru>=0.7.3",
 ]
 
 [dependency-groups]
 dev = [
+    "mypy>=1.16.1",
     "ruff>=0.11.13",
+    "types-six>=1.17.0.20250515",
+    "types-tqdm>=4.67.0.20250516",
 ]
 
 [tool.ruff]
@@ -30,4 +37,3 @@ line-length = 120
 format.preview = true
 format.docstring-code-format = true
 lint.preview = true
-
