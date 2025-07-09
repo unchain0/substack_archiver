@@ -29,6 +29,7 @@ dev = [
     "ruff>=0.11.13",
     "types-six>=1.17.0.20250515",
     "types-tqdm>=4.67.0.20250516",
+    "pytest>=8.3.2",
 ]
 
 [tool.ruff]
@@ -37,3 +38,9 @@ line-length = 120
 format.preview = true
 format.docstring-code-format = true
 lint.preview = true
+
+[tool.setuptools.packages.find]
+exclude = ["html_dumps*", "json_dumps*", "text_dumps*", "README*", "tests*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
