@@ -122,29 +122,27 @@ class SubstackPlaywrightHandler:
                                     or soup.find("div", class_="body")
                                 )
 
+                                post = Post.from_dict(post_data)
+
+                                css_style = get_css_style()
+                                date_html = format_date_html(post.post_date)
+                                audio_html = format_audio_html(post.audio_url)
+
                                 if main_content_div:
                                     post_data["body_html"] = str(main_content_div)
-                                    post_title = post_data.get("title", "Untitled")
-                                    post_description = post_data.get("description", "")
-                                    post_audio = post_data.get("audio_url")
-                                    post_date = post_data.get("post_date")
 
                                     temp_post_for_rendering = {
-                                        "title": post_title,
-                                        "body": post_data["body_html"],
-                                        "description": post_description,
-                                        "audio": post_audio,
-                                        "date": post_date,
+                                        "title": post.title,
+                                        "body": post.body_html,
+                                        "description": post.description,
+                                        "audio": post.audio_url,
+                                        "date": post.post_date,
                                     }
-
-                                    css_style = get_css_style()
-                                    date_html = format_date_html(post_date)
-                                    audio_html = format_audio_html(post_audio)
 
                                     html_template = self._create_html_template(
                                         temp_post_for_rendering, css_style, date_html, audio_html
                                     )
-                                    saved_file_path = self._save_html_file(post_title, html_template)
+                                    saved_file_path = self._save_html_file(post.title, html_template)
 
                                     if saved_file_path:
                                         await self._convert_single_html_to_text(saved_file_path)
@@ -184,7 +182,7 @@ class SubstackPlaywrightHandler:
 
         for batch in post_requests:
             for post_data in batch:
-                post = Post(**post_data)
+                post = Post.from_dict(post_data)
                 if post.body_html is None:
                     body_none.append(post.title)
                 else:
