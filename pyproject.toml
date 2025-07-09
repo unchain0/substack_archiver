@@ -17,9 +17,9 @@ dependencies = [
     "termcolor==1.1.0",
     "typing-extensions==4.12.2",
     "urllib3==1.26.19",
-    "html2text",
-    "beautifulsoup4",
-    "tqdm",
+    "html2text>=2020.1.16",
+    "beautifulsoup4>=4.12.2",
+    "tqdm>=4.66.1",
     "loguru>=0.7.3",
 ]
 
@@ -30,7 +30,7 @@ dev = [
     "types-six>=1.17.0.20250515",
     "types-tqdm>=4.67.0.20250516",
     "pytest>=8.3.2",
-    "pre-commit",
+    "pre-commit>=3.7.1",
 ]
 
 [tool.ruff]
