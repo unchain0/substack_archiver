@@ -1,4 +1,4 @@
-import pytest
+import pytest  # type: ignore
 import json
 from src.config import load_config
 

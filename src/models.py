@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Any
 
 
 @dataclass
@@ -8,6 +7,7 @@ class Post:
     body_html: str | None
     description: str = ""
     podcast_url: str = ""
+    audio_url: str = ""
     post_date: str = ""
 
 

@@ -10,6 +10,7 @@ from playwright.async_api import Page
 from tqdm.asyncio import tqdm
 
 from src.utils import serialize, get_css_style, format_date_html, format_audio_html
+from src.models import Post, ProcessedPosts
 
 request_posts = list[list[dict[str, Any]]]
 
@@ -172,6 +173,38 @@ class SubstackPlaywrightHandler:
         for i, posts in enumerate(post_requests):
             with open(f"{self.json_path}/dump{i}.json", "w") as f:
                 json.dump(posts, f)
+
+    def _process_posts(self, post_requests: list[Any]) -> ProcessedPosts:
+        body_none: list[str] = []
+        titles: list[str] = []
+        bodies: list[str] = []
+        descriptions: list[str] = []
+        audio_files: list[str] = []
+        post_dates: list[str] = []
+
+        for batch in post_requests:
+            for post_data in batch:
+                post = Post(**post_data)
+                if post.body_html is None:
+                    body_none.append(post.title)
+                else:
+                    bodies.append(post.body_html)
+                titles.append(post.title)
+                if post.description:
+                    descriptions.append(post.description)
+                if post.audio_url:
+                    audio_files.append(post.audio_url)
+                if post.post_date:
+                    post_dates.append(post.post_date)
+
+        return ProcessedPosts(
+            titles=titles,
+            bodies=bodies,
+            descriptions=descriptions,
+            body_none=body_none,
+            audio_files=audio_files,
+            post_dates=post_dates,
+        )
 
     async def parse_to_html(self, post_requests: list[Any]) -> tuple[list[str], list[str], list[str]]:
         processed_posts = self._process_posts(post_requests)

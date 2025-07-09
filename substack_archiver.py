@@ -93,7 +93,7 @@ async def main() -> None:
             logger.info("Browser configured, starting to fetch posts...")
             post_requests = await handler.get_posts(page)
 
-            html_result: tuple[list[str], list[str], list[str>] = ([], [], [])
+            html_result: tuple[list[str], list[str], list[str]] = ([], [], [])
 
             if not post_requests or len(post_requests) == 0:
                 logger.error("No posts were retrieved. Check if the Substack URL is correct.")
