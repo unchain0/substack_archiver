@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-import os
 
 from loguru import logger
 from playwright.async_api import Page, Browser
@@ -50,50 +49,8 @@ class SubstackRepository:
             )
             page.on("pageerror", lambda err: logger.error(f"Page error: {err}"))
 
-            if os.getenv("SUBSTACK_EMAIL") and os.getenv("SUBSTACK_PASSWORD"):
-                login_successful = await self.login(page)
-                if not login_successful:
-                    logger.error("Login failed for this substack. Skipping to next.")
-                else:
-                    logger.debug("Login reported as successful.")
-            else:
-                logger.warning(
-                    "No login credentials found in .env and no storage_state.json. Proceeding without login."
-                )
+            logger.warning("No storage_state.json found. Proceeding without login.")
         return page
-
-    async def login(self, page: Page) -> bool:
-        email = os.getenv("SUBSTACK_EMAIL")
-        password = os.getenv("SUBSTACK_PASSWORD")
-
-        if not email or not password:
-            logger.warning("SUBSTACK_EMAIL or SUBSTACK_PASSWORD not set in .env. Skipping login.")
-            return False
-
-        logger.debug("Attempting to log in...")
-        login_url = f"{self.base_url}/account/login"
-        await page.goto(login_url)
-
-        try:
-            logger.debug("Filling email...")
-            await page.fill("input[name='email']", email)
-            logger.debug("Clicking first continue button...")
-            await page.click("button[type='submit']")
-
-            logger.debug("Waiting for password field...")
-            await page.wait_for_selector("input[name='password']", timeout=30000)
-            logger.debug("Filling password...")
-            await page.fill("input[name='password']", password)
-            logger.debug("Clicking second continue button...")
-            await page.click("button[type='submit']")
-
-            logger.debug("Waiting for successful login indicator...")
-            await page.wait_for_selector('a[href*="/account"]', timeout=30000)
-            logger.success("Login successful!")
-            return True
-        except Exception as e:
-            logger.error(f"Login failed: {e}")
-            return False
 
     async def get_posts(self, page: Page, progress: Progress, task_id) -> list[dict]:
         all_posts_data = []
