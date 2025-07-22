@@ -1,7 +1,6 @@
-from typing import Any
-
 from loguru import logger
 from playwright.async_api import Browser
+from rich.progress import Progress
 
 from app.models import Post
 from app.repositories.file_repository import FileRepository
@@ -9,22 +8,24 @@ from app.repositories.substack_repository import SubstackRepository
 
 
 class ArchiverService:
-    def __init__(self, substack_handle: str, base_url: str, browser: Browser) -> None:
+    def __init__(self, substack_handle: str, base_url: str, browser: Browser, progress: Progress) -> None:
         self.substack_handle = substack_handle
         self.base_url = base_url
         self.browser = browser
         self.substack_repository = SubstackRepository(base_url, browser)
         self.file_repository = FileRepository(substack_handle)
+        self.progress = progress
+        self.task_id = self.progress.add_task(f"[cyan]{self.substack_handle}[/cyan]", total=None)
 
     async def archive(self) -> None:
         page = await self.substack_repository.get_page()
-        posts = await self.substack_repository.get_posts(page)
-        self.file_repository.dump_to_json(posts)
+        all_posts_data = await self.substack_repository.get_posts(page, self.progress, self.task_id)
+        self.file_repository.dump_to_json(all_posts_data)
 
         body_none_count = 0
         downloaded_posts_count = 0
 
-        for post_data_dict in posts:
+        for post_data_dict in all_posts_data:
             post = Post.from_dict(post_data_dict)
 
             if post.title and post.body_html:
@@ -35,13 +36,15 @@ class ArchiverService:
                     downloaded_posts_count += 1
             else:
                 body_none_count += 1
-                logger.warning(f"Skipping post '{post.title}' due to missing body_html or title.")
+                logger.debug(f"Skipping post '{post.title}' due to missing body_html or title.")
 
+        self.progress.update(self.task_id, description=f"[green]{self.substack_handle} (Done)[/green]")
+        self.progress.remove_task(self.task_id)
 
-        logger.success(f"Number of downloaded posts: {downloaded_posts_count}")
-        logger.error(f"Number of posts without body: {body_none_count}")
+        logger.debug(f"Number of downloaded posts: {downloaded_posts_count}")
+        logger.debug(f"Number of posts without body: {body_none_count}")
 
         if body_none_count > 0:
-            logger.warning("Some posts might be inaccessible. Check if you have the necessary permissions.")
+            logger.debug("Some posts might be inaccessible. Check if you have the necessary permissions.")
 
-        logger.success("Done for this substack!")
+        logger.debug("Done for this substack!")

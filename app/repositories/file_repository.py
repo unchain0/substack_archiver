@@ -25,10 +25,10 @@ class FileRepository:
         self._load_existing_html_files()
 
     def _load_existing_html_files(self) -> None:
-        logger.info(f"Checking for existing HTML files in {self.html_path}...")
+        logger.debug(f"Checking for existing HTML files in {self.html_path}...")
         if self.html_path.exists():
             self.existing_html_files = {f.name for f in self.html_path.iterdir() if f.suffix == ".html"}
-        logger.info(f"Found {len(self.existing_html_files)} existing HTML files.")
+        logger.debug(f"Found {len(self.existing_html_files)} existing HTML files.")
 
     def dump_to_json(self, posts: list[dict]) -> None:
         with open(self.json_path / "dump.json", "w") as f:

@@ -30,9 +30,6 @@ class Post:
         return instance
 
 
-
-
-
 @dataclass
 class PostForRendering:
     title: str
