@@ -30,18 +30,7 @@ class Post:
         return instance
 
 
-@dataclass
-class ProcessedPosts:
-    titles: list[str]
-    bodies: list[str]
-    descriptions: list[str]
-    body_none: list[str]
-    audio_files: list[str]
-    post_dates: list[str]
 
-    @classmethod
-    def create_empty(cls) -> "ProcessedPosts":
-        return cls([], [], [], [], [], [])
 
 
 @dataclass

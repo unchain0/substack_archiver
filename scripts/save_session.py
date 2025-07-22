@@ -1,10 +1,12 @@
 import asyncio
+from pathlib import Path
+
 from playwright.async_api import async_playwright
 
 
 async def save_session_state():
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)  # Set to False to see the browser
+        browser = await p.chromium.launch(headless=False)
         context = await browser.new_context()
         page = await context.new_page()
 
@@ -12,14 +14,14 @@ async def save_session_state():
         print("Once logged in, close the browser window.")
         print("Then, press Enter in this terminal to save the session.")
 
-        await page.goto("https://yohannbtc.substack.com/account/login")
+        await page.goto("https://substack.com/sign-in")
 
-        # Wait for user to press Enter in the terminal
         input("Press Enter to continue...")
 
         # Save the storage state
-        await context.storage_state(path="storage_state.json")
-        print("Session state saved to storage_state.json")
+        storage_state_path = Path("storage_state.json")
+        await context.storage_state(path=str(storage_state_path))
+        print(f"Session state saved to {storage_state_path}")
 
         await browser.close()  # Explicitly close the browser
 
