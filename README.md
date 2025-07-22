@@ -80,18 +80,6 @@ ensuring robust and reliable archiving.
     ]
     ```
 
-2. **Set Up Environment Variables (Optional - for Login):**
-   To archive private or paywalled content, you need to provide your Substack
-   credentials.
-
-   Create a file named `.env` in the project root and add your email and
-   password:
-
-    ```bash
-    SUBSTACK_EMAIL="your_email@example.com"
-    SUBSTACK_PASSWORD="your_password"
-    ```
-
 ## Usage
 
 ### Running the Archiver
