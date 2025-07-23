@@ -42,3 +42,6 @@ archive/
 
 # Playwright
 storage_state.json
+
+# Config
+config.json
