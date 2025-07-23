@@ -12,11 +12,12 @@ from app.utils import serialize
 
 
 class FileRepository:
-    def __init__(self, substack_handle: str) -> None:
+    def __init__(self, substack_handle: str, output_directory: str = "./archive") -> None:
         self.substack_handle = substack_handle
-        self.html_path = Path(f"html_dumps/{substack_handle}")
-        self.json_path = Path(f"json_dumps/{substack_handle}")
-        self.text_path = Path(f"text_dumps/{substack_handle}")
+        base_path = Path(output_directory) / substack_handle
+        self.html_path = base_path / "html_dumps"
+        self.json_path = base_path / "json_dumps"
+        self.text_path = base_path / "text_dumps"
         self.existing_html_files: set[str] = set()
 
         self.html_path.mkdir(parents=True, exist_ok=True)
@@ -25,10 +26,11 @@ class FileRepository:
         self._load_existing_html_files()
 
     def _load_existing_html_files(self) -> None:
-        logger.debug(f"Checking for existing HTML files in {self.html_path}...")
-        if self.html_path.exists():
-            self.existing_html_files = {f.name for f in self.html_path.iterdir() if f.suffix == ".html"}
-        logger.debug(f"Found {len(self.existing_html_files)} existing HTML files.")
+        self.existing_html_files = {file.name for file in self.html_path.glob("*.html")}
+
+    def html_file_exists(self, title: str) -> bool:
+        file_name = serialize(title)
+        return (self.html_path / f"{file_name}.html").is_file()
 
     def dump_to_json(self, posts: list[dict]) -> None:
         with open(self.json_path / "dump.json", "w") as f:

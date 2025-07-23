@@ -27,7 +27,17 @@ async def cli(substacks_to_process: list[dict[str, str]]) -> None:
                     continue
 
                 # Pass the rich progress instance to the service
-                archiver_service = ArchiverService(substack_handle, base_url, browser, progress)
+                output_directory = substack_config.get("output_directory", "./archive")
+                skip_existing = bool(substack_config.get("skip_existing", True))
+
+                archiver_service = ArchiverService(
+                    substack_handle,
+                    base_url,
+                    browser,
+                    progress,
+                    output_directory=output_directory,
+                    skip_existing=skip_existing,
+                )
                 tasks.append(archiver_service.archive())
 
             await asyncio.gather(*tasks)

@@ -8,14 +8,23 @@ from app.repositories.substack_repository import SubstackRepository
 
 
 class ArchiverService:
-    def __init__(self, substack_handle: str, base_url: str, browser: Browser, progress: Progress) -> None:
+    def __init__(
+        self,
+        substack_handle: str,
+        base_url: str,
+        browser: Browser,
+        progress: Progress,
+        output_directory: str = "./archive",
+        skip_existing: bool = True,
+    ) -> None:
         self.substack_handle = substack_handle
         self.base_url = base_url
         self.browser = browser
         self.substack_repository = SubstackRepository(base_url, browser)
-        self.file_repository = FileRepository(substack_handle)
+        self.file_repository = FileRepository(substack_handle, output_directory)
         self.progress = progress
         self.task_id = self.progress.add_task(f"[cyan]{self.substack_handle}[/cyan]", total=None)
+        self.skip_existing = skip_existing
 
     async def archive(self) -> None:
         page = await self.substack_repository.get_page()
@@ -28,12 +37,17 @@ class ArchiverService:
         for post_data_dict in all_posts_data:
             post = Post.from_dict(post_data_dict)
 
+            if post.title and self.skip_existing and self.file_repository.html_file_exists(post.title):
+                logger.debug(f"Skipping existing post: {post.title}")
+                continue
+
             if post.title and post.body_html:
                 html_content = self.file_repository.create_html_template(post)
                 saved_file_path = self.file_repository.save_html_file(post.title, html_content)
                 if saved_file_path:
                     await self.file_repository.convert_single_html_to_text(saved_file_path)
                     downloaded_posts_count += 1
+
             else:
                 body_none_count += 1
                 logger.debug(f"Skipping post '{post.title}' due to missing body_html or title.")
