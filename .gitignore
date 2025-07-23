@@ -158,8 +158,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+archive/
 html_dumps/
 json_dumps/
 text_dumps/
 .env
 storage_state.json
+
