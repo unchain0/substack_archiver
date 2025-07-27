@@ -4,6 +4,7 @@ from pathlib import Path
 from loguru import logger
 from playwright.async_api import Browser, Page
 from rich.progress import Progress
+from typing import Any
 
 
 class SubstackRepository:
@@ -15,7 +16,7 @@ class SubstackRepository:
         self.browser = browser
 
     async def get_page(self) -> Page:
-        context_options = {
+        context_options: dict[str, str] = {
             "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36)",
             "locale": "en-US",
         }
@@ -41,7 +42,7 @@ class SubstackRepository:
                 "Accept": "application/json",
                 "Accept-Language": "en-US,en;q=0.9",
                 "Referer": self.base_url,
-                "X-Requested-With": "XMLHttpRequest",
+                "X-Requested_With": "XMLHttpRequest",
             })
 
             page.on(
@@ -52,8 +53,8 @@ class SubstackRepository:
             logger.warning("No storage_state.json found. Proceeding without login.")
         return page
 
-    async def get_posts(self, page: Page, progress: Progress, task_id) -> list[dict]:
-        all_posts_data: list[dict] = []
+    async def get_posts(self, page: Page, progress: Progress, task_id: Any) -> list[Any]:
+        all_posts_data: list[Any] = []
         offset = 0
 
         logger.debug("Fetching posts from Substack API...")

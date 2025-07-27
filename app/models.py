@@ -1,5 +1,6 @@
 import dataclasses
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -11,16 +12,16 @@ class Post:
     audio_url: str | None = None
     post_date: str | None = None
     audience: str | None = None
-    extra_fields: dict = field(default_factory=dict)
+    extra_fields: dict[str, Any] = field(default_factory=dict)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         # Move any unexpected keyword arguments into extra_fields
         for key in list(self.__dict__.keys()):
             if key not in self.__annotations__ and key != "extra_fields":
                 self.extra_fields[key] = self.__dict__.pop(key)
 
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, data: dict[str, Any]) -> "Post":
         # Filter out keys not in the dataclass fields before passing to constructor
         valid_keys = {f.name for f in dataclasses.fields(cls)}
         filtered_data = {k: v for k, v in data.items() if k in valid_keys}

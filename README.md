@@ -28,8 +28,7 @@ ensuring robust and reliable archiving.
 
 ### Prerequisites
 
-- Python 3.12+
-- [uv](https://github.com/astral-sh/uv) (install it from its official GitHub page)
+- [uv](https://github.com/astral-sh/uv) (click to install)
 
 ### Installation
 
@@ -52,7 +51,7 @@ ensuring robust and reliable archiving.
     playwright install
     ```
 
-4. **Install pre-commit hooks:**
+4. **Install pre-commit hooks:** (optional)
 
     ```bash
     uv run pre-commit install
@@ -64,39 +63,28 @@ ensuring robust and reliable archiving.
 ### Configuration
 
 1. **Configure Substacks:**
-   Open the `config.json` file and add the Substack publications you want to
-   archive. The file should now be a direct list of configurations:
+   Open the `config.json` file and add the Substack publication URLs you want to
+   archive. The names will be automatically extracted from the URLs.
 
-    ```json
-    [
-      {
-        "name": "example",
-        "url": "https://example.substack.com/"
-      },
-      {
-        "name": "customdomain",
-        "url": "https://www.customdomain.com/"
-      }
-    ]
-    ```
+   Example configuration:
+
+   ```json
+   [
+     "https://artificialcorner.com/archive",
+     "https://www.cafecomsatoshi.com.br/archive",
+     "https://amoedo.substack.com"
+   ]
+   ```
+
+   The archiver supports both standard Substack URLs (`*.substack.com`) and
+   custom domain URLs.
 
 ## Usage
 
-### Running the Archiver
-
-Once you have configured your `config.json` file, run the archiver:
-
-```bash
-uv run main.py
-```
-
-The script will iterate through the publications in your config file and archive
-their posts.
-
-### Saving Your Login Session (Optional)
+### Saving Your Login Session
 
 To avoid logging in every time, you can save your session state after a
-successful login.
+successful login. It's also necessary to scrape **paywalled posts**.
 
 1. **Run the `save_session.py` script:**
 
@@ -111,20 +99,27 @@ successful login.
    automatically use this file for future runs, bypassing the need for manual
    login.
 
+### Running the Archiver
+
+Once you have configured your `config.json` file, run the archiver:
+
+```bash
+uv run main.py
+```
+
+The script will iterate through the publications in your config file and archive
+their posts.
+
 ## Output
 
 - `html_dumps/`: Contains the original HTML of each post.
 - `json_dumps/`: Contains the raw JSON data for each post.
 - `text_dumps/`: Contains a clean, readable plain text version of each post.
 
-Each of these directories will have subdirectories corresponding to the `name`
-you provided in `config.json`.
+Each of these directories will have subdirectories corresponding to the name
+automatically extracted from the URL (e.g., "plebs" for
+<https://plebs.substack.com>).
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md)
-file for details.

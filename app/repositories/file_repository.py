@@ -9,6 +9,7 @@ from loguru import logger
 
 from app.models import Post
 from app.utils import serialize
+from typing import Any, cast
 
 
 class FileRepository:
@@ -32,7 +33,7 @@ class FileRepository:
         file_name = serialize(title)
         return (self.html_path / f"{file_name}.html").is_file()
 
-    def dump_to_json(self, posts: list[dict]) -> None:
+    def dump_to_json(self, posts: list[Any]) -> None:
         with open(self.json_path / "dump.json", "w") as f:
             json.dump(posts, f)
 
@@ -90,12 +91,12 @@ class FileRepository:
 
         text_file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        def _sync_convert():
+        def _sync_convert() -> str:
             with open(html_file_path_obj, "r", encoding="utf-8") as f:
                 html_content = f.read()
-            return html2text.html2text(self._clean_html_for_text_conversion(html_content))
+            return cast(str, html2text.html2text(self._clean_html_for_text_conversion(html_content)))
 
-        text_content = await loop.run_in_executor(None, _sync_convert)  # type: ignore
+        text_content = cast(str, await loop.run_in_executor(None, _sync_convert))
 
         with open(text_file_path, "w", encoding="utf-8") as f:
             f.write(text_content)
