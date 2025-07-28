@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
+from typing import Any
 
 from loguru import logger
 from playwright.async_api import Browser, Page
 from rich.progress import Progress
-from typing import Any
 
 
 class SubstackRepository:
@@ -54,6 +54,17 @@ class SubstackRepository:
         return page
 
     async def get_posts(self, page: Page, progress: Progress, task_id: Any) -> list[Any]:
+        """
+        Fetch posts from Substack API.
+
+        Args:
+            page: The Page object to use for navigation.
+            progress: The Progress object to use for progress updates.
+            task_id: The task ID to use for progress updates.
+
+        Returns:
+            A list of posts.
+        """
         all_posts_data: list[Any] = []
         offset = 0
 

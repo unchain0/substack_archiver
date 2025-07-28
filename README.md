@@ -58,7 +58,7 @@ ensuring robust and reliable archiving.
     ```
 
     This project uses `pre-commit` hooks for code quality, including `ruff`
-    (linter and formatter), `pyrefly` (type checker), and `pytest` (test runner).
+    (linter and formatter), `mypy` (type checker), and `pytest` (test runner).
 
 ### Configuration
 

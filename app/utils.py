@@ -1,13 +1,15 @@
 import re
-from loguru import logger
+import unicodedata
 from pathlib import Path
 from typing import Any
 
 
 def serialize(value: str) -> str:
-    if not isinstance(value, str):
-        logger.error(f"Error serializing: {value} is not a string")
+    # Normalize the string to decomposed form and remove diacritics
+    value = unicodedata.normalize("NFKD", value)
+    value = "".join(c for c in value if not unicodedata.combining(c))
 
+    # Remove any remaining special characters except alphanumeric, spaces, and hyphens
     value = re.sub(r"[^a-zA-Z0-9\s-]", "", value)
     return re.sub(r"[-\s]+", "-", value).strip("-")
 

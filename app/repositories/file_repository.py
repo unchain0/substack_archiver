@@ -1,7 +1,8 @@
 import asyncio
 import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any, cast
 
 import html2text
 from bs4 import BeautifulSoup, Tag
@@ -9,7 +10,6 @@ from loguru import logger
 
 from app.models import Post
 from app.utils import serialize
-from typing import Any, cast
 
 
 class FileRepository:

@@ -35,7 +35,7 @@ def extract_name_from_url(url: str) -> str:
     domain = domain.replace("www.", "")
     name = domain.split(".")[0]
 
-    logger.warning(f"Using fallback name extraction for URL: {url} -> {name}")
+    logger.debug(f"Using fallback name extraction for URL: {url} -> {name}")
     return name
 
 

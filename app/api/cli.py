@@ -2,7 +2,7 @@ import asyncio
 
 from loguru import logger
 from playwright.async_api import async_playwright
-from rich.progress import Progress, TextColumn, BarColumn, SpinnerColumn
+from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 
 from app.services.archiver_service import ArchiverService
 
@@ -18,7 +18,7 @@ async def cli(substacks_to_process: list[dict[str, str]]) -> None:
             TextColumn("{task.completed} posts"),
         ) as progress:
             tasks = []
-            for i, substack_config in enumerate(substacks_to_process):
+            for _, substack_config in enumerate(substacks_to_process):
                 substack_handle = substack_config.get("name")
                 base_url = substack_config.get("url")
 

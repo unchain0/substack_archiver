@@ -29,6 +29,11 @@ dependencies = [
     "langchain>=0.3.27",
     "faiss-cpu>=1.11.0.post1",
     "langchain-openai>=0.3.28",
+    "psycopg2>=2.9.10",
+    "pgvector>=0.4.1",
+    "openai>=1.97.1",
+    "sqlalchemy>=2.0.41",
+    "agno>=1.7.6",
 ]
 
 [dependency-groups]

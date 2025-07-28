@@ -1,15 +1,5 @@
-"""
-Optimized FAISS-based RAG system with the following performance improvements:
-
-1. Vector Store Persistence: Saves and loads vector store from disk to avoid recomputation
-2. Incremental Updates: Only recreates vector store when new documents are added
-3. Batch Processing: Processes documents in batches to reduce memory usage
-4. Optimized Chunk Size: Uses larger chunks (1000 chars) with overlap for better context
-5. Limited Retrieval: Retrieves only top 5 most relevant documents
-6. Fast Text Splitting: Uses RecursiveCharacterTextSplitter for efficient chunking
-"""
-
 from pathlib import Path
+from typing import Any, Optional, cast
 
 from dotenv import load_dotenv
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
@@ -23,10 +13,9 @@ from langchain_openai import ChatOpenAI
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain_text_splitters.character import RecursiveCharacterTextSplitter
 from rich.progress import BarColumn, Progress, TextColumn, TimeRemainingColumn
-from typing import Any, Optional, cast
 
 
-class Rag:
+class RagService:
     def __init__(self, temperature: float) -> None:
         """Initialize the RAG system.
 
@@ -36,20 +25,19 @@ class Rag:
         load_dotenv()
 
         self.temperature = temperature
-        self.archive_path = Path(__file__).parents[1] / "archive"
+        self.archive_path = Path(__file__).parents[2] / "archive"
         self.vector_store_path = self.archive_path / "vector_store"
         self.vector_store: Optional[FAISS] = None
         self.chat_history: list[Any] = []
         self.convo_qa_chain: Any = None
 
-        # Initialize models
         self._init_models()
         self._load_docs()
         self._setup_chains()
 
     def _init_models(self) -> None:
         """Initialize the LLM and embeddings."""
-        self.llm = ChatOpenAI(model="gpt-4.1-mini", temperature=self.temperature)
+        self.llm = ChatOpenAI(model="gpt-4o", temperature=self.temperature)
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
     def _load_docs(self) -> None:
@@ -63,7 +51,6 @@ class Rag:
 
         print("Vector store is outdated or doesn't exist. Recreating...")
 
-        # Load documents from the specified archive path
         print("Loading documents from archive...")
         loader = DirectoryLoader(
             str(self.archive_path),
@@ -78,7 +65,6 @@ class Rag:
             print("No documents found in archive.")
             return
 
-        # Split documents into manageable chunks
         print("Splitting documents...")
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
@@ -86,7 +72,6 @@ class Rag:
         )
         all_splits = text_splitter.split_documents(data)
 
-        # Store splits in the vector store with batch processing
         print("Creating vector store...")
         batch_size = 100
         total_batches = (len(all_splits) + batch_size - 1) // batch_size
@@ -111,7 +96,7 @@ class Rag:
                 if i == 0:
                     self.vector_store = FAISS.from_documents(batch, embedding=self.embeddings)
                 else:
-                    if self.vector_store:  # Ensure vector_store is not None
+                    if self.vector_store:
                         batch_store = FAISS.from_documents(batch, embedding=self.embeddings)
                         self.vector_store.merge_from(batch_store)
 
@@ -119,7 +104,7 @@ class Rag:
 
         print("Saving vector store to disk...")
         self.vector_store_path.mkdir(parents=True, exist_ok=True)
-        if self.vector_store:  # Ensure vector_store is not None
+        if self.vector_store:
             self.vector_store.save_local(str(self.vector_store_path))
         print("Vector store created and saved.")
 
@@ -206,7 +191,7 @@ class Rag:
         Args:
             temperature: The temperature for the LLM (0-1)
         """
-        rag_service = Rag(temperature=temperature)
+        rag_service = RagService(temperature=temperature)
         print("Talk to the assistant. Type 'exit' to quit.")
         while True:
             user_input = input("User: ")
