@@ -42,7 +42,7 @@ The system is composed of several key technologies working together:
 - **Playwright**: For robust browser automation to scrape Substack content.
 - **Agno**: A framework that orchestrates the RAG pipeline, managing the
   knowledge base, memory, and interaction with the LLM.
-- **PostgreSQL + pgvector**: A local vector database to store and efficiently
+- **PostgreSQL + pgvector**: A vector database to store and efficiently
   query the text embeddings of your archived posts.
 - **OpenAI**: Utilizes `GPT-4o` for generating responses and
   `text-embedding-3-large` for creating vector embeddings.
@@ -51,9 +51,10 @@ The system is composed of several key technologies working together:
 
 ### Prerequisites
 
+- **Python 3.12+**
 - [**uv**](https://github.com/astral-sh/uv): For Python package management.
-- [**Docker**](https://www.docker.com/): To run the PostgreSQL database with the
-  `pgvector` extension.
+- **PostgreSQL with `pgvector` extension**: The chatbot requires a running
+  PostgreSQL instance with the `pgvector` extension enabled.
 - [**OpenAI API Key**](https://platform.openai.com/api-keys): Required for the
   chatbot to function.
 
@@ -66,13 +67,25 @@ The system is composed of several key technologies working together:
    cd substack_archiver
    ```
 
-2. **Start the database:**
+2. **Set up the Database:**
 
-   Make sure Docker is running, then start the PostgreSQL database service:
+   Ensure your PostgreSQL server is running. The application needs a database
+   named `substack` with the `pgvector` extension enabled.
+
+   **a) Create the database (if it doesn't exist):**
 
    ```bash
-   docker-compose up -d
+   createdb substack
    ```
+
+   **b) Enable the `pgvector` extension:**
+
+   ```bash
+   psql -d substack -c "CREATE EXTENSION IF NOT EXISTS vector;"
+   ```
+
+   *Note: You might need to run this as a superuser, e.g.,*
+   *`sudo -u postgres psql ...`.*
 
 3. **Install dependencies:**
 
