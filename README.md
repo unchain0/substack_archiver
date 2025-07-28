@@ -26,7 +26,7 @@ The project has two main components:
   session.
 - **Intelligent Chatbot (RAG)**: Interact with your entire archive through a
   conversational AI.
-- **Semantic Search**: Uses vector embeddings (`text-embedding-3-large`) to
+- **Semantic Search**: Uses vector embeddings (`text-embedding-3-small`) to
   find the most relevant information, even if the keywords don't match
   exactly.
 - **Local Knowledge Base**: All your data is stored locally, and the chatbot
@@ -45,7 +45,7 @@ The system is composed of several key technologies working together:
 - **PostgreSQL + pgvector**: A vector database to store and efficiently
   query the text embeddings of your archived posts.
 - **OpenAI**: Utilizes `GPT-4o` for generating responses and
-  `text-embedding-3-large` for creating vector embeddings.
+  `text-embedding-3-small` for creating vector embeddings.
 
 ## Getting Started
 
